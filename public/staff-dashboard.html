@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - Municipal Issue Portal</title>
+    <!-- We will use the same great styling you already have -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Simple loading spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <nav class="container nav">
+            <a href="#" class="brand">
+                <svg class="h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+                <span>Staff Dashboard</span>
+            </a>
+            <div class="nav-links">
+                <span id="user-greeting" class="font-semibold text-gray-700">Welcome!</span>
+                <button id="logout-button" class="btn ghost">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container py-8">
+        <div class="space-y-6">
+            <h1 class="text-3xl font-bold text-gray-900">Pending Verification</h1>
+            <p class="text-gray-600">Review the following issues submitted by citizens and forward them to the correct department.</p>
+
+            <!-- Issues List Container -->
+            <div id="issues-container" class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                <!-- Loading indicator will be shown here first -->
+                <div id="loader" class="loader"></div>
+                
+                <!-- Issues will be dynamically added here by JavaScript -->
+                <p id="no-issues-message" class="text-center text-gray-500 hidden">No pending issues to verify. Great job!</p>
+            </div>
+        </div>
+    </main>
+
+      
+
+<script src="api.js"></script>
+<script src="staff-dashboard.js"></script>
+
+
+
+      
+    </script>
+
+   
+</body>
+</html>
