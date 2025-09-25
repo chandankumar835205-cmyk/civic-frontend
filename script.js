@@ -69,9 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (user_role === 'department_head') {
                     // Special case for department head to match the correct filename.
                     window.location.href = `department-dashboard.html`;
-                } else {
+                }
+                 else if (user_role === `staff`){
                     // Handles 'super_admin', 'staff', etc.
-                    window.location.href = `${user_role}-dashboard.html`;
+                    window.location.href = `staff-dashboard.html`;
+                }
+                else{
+                     window.location.href = `${user_role}-dashboard.html`;
+
                 }
             }, 1000);
 
