@@ -15,11 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let issueToDeleteId = null;
 
     // --- 1. Authentication Check ---
-    const user = getLoggedInUser();
-    if (!user || user.role !== 'super_admin') {
-        window.location.href = 'index.html';
-        return;
-    }
+  const user = getLoggedInUser();
+// If only staff users should see this page:
+if (!user || user.role !== 'staff') {
+    window.location.href = 'index.html';
+    return;
+}
+
+
+
     userEmailDisplay.textContent = user.email;
 
     // --- 2. Data Fetching and Rendering ---
