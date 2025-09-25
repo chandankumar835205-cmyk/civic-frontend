@@ -2,7 +2,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- ELEMENT REFERENCES ---
-    // CORRECTED: The ID now matches the one in the HTML file.
     const userEmailDisplay = document.getElementById('user-email-display');
     const signOutBtn = document.getElementById('sign-out-btn');
     const issuesTableBody = document.getElementById('issues-table-body');
@@ -107,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmDeleteBtn.disabled = true;
             try {
                 await deleteIssue(issueToDeleteId); // From api.js
+                // Remove from local cache and re-render for instant feedback
                 allIssues = allIssues.filter(issue => issue.id !== parseInt(issueToDeleteId));
                 renderIssues(allIssues.filter(issue => departmentFilter.value === 'all' || issue.department === departmentFilter.value));
                 populateDepartmentFilter(allIssues);
@@ -121,8 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    signOutBtn.addEventListener('click', logout);
+    signOutBtn.addEventListener('click', logout); // From api.js
 
     // --- 4. Initial Load ---
     initializeDashboard();
 });
+

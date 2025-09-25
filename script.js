@@ -1,4 +1,4 @@
-// The complete and updated script.js
+// frontend/script.js
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Element References ---
@@ -16,23 +16,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UI Transition Functions ---
     const showForm = (formToShow) => {
-        loginSelection.classList.add('opacity-0', 'hidden');
-        formToShow.classList.remove('hidden');
-        setTimeout(() => formToShow.classList.remove('opacity-0'), 10);
+        loginSelection.classList.add('opacity-0');
+        setTimeout(() => {
+            loginSelection.classList.add('hidden');
+            formToShow.classList.remove('hidden');
+            setTimeout(() => formToShow.classList.remove('opacity-0'), 10);
+        }, 300);
     };
 
-    const showSelectionScreen = () => {
-        [adminLoginContainer, deptLoginContainer, staffLoginContainer].forEach(c => {
-            c.classList.add('opacity-0');
-            setTimeout(() => c.classList.add('hidden'), 300);
-        });
-        loginSelection.classList.remove('hidden', 'opacity-0');
+    const showSelectionScreen = (currentForm) => {
+        currentForm.classList.add('opacity-0');
+        setTimeout(() => {
+            currentForm.classList.add('hidden');
+            loginSelection.classList.remove('hidden');
+            setTimeout(() => loginSelection.classList.remove('opacity-0'), 10);
+        }, 300);
     };
 
     showAdminLoginBtn.addEventListener('click', () => showForm(adminLoginContainer));
     showDeptLoginBtn.addEventListener('click', () => showForm(deptLoginContainer));
     showStaffLoginBtn.addEventListener('click', () => showForm(staffLoginContainer));
-    backButtons.forEach(button => button.addEventListener('click', showSelectionScreen));
+    backButtons.forEach(button => {
+        const parentForm = button.closest('.form-container');
+        button.addEventListener('click', () => showSelectionScreen(parentForm));
+    });
 
     // --- Universal Login Handler ---
     const handleLogin = async (event, expectedRole) => {
@@ -41,51 +48,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = form.querySelector('input[type="email"]').value;
         const password = form.querySelector('input[type="password"]').value;
         const submitButton = form.querySelector('button[type="submit"]');
-        
-        // Correctly select the message element
-        const messageId = expectedRole === 'departhead' ? 'dept-message' : `${expectedRole}-message`;
-        const messageEl = document.getElementById(messageId);
+        const messageEl = form.querySelector('.message-area');
 
         messageEl.textContent = 'Signing In...';
         messageEl.className = 'message-area text-gray-600';
         submitButton.disabled = true;
 
         try {
-            // Call the login function from api.js
             const { user_role } = await login(email, password); 
             
-            // This frontend check is for user experience (UX), not security.
             if (user_role !== expectedRole) {
-                throw new Error(`Access Denied. You do not have '${expectedRole}' permissions.`);
+                throw new Error(`Access Denied. Your account does not have '${expectedRole}' permissions.`);
             }
             
             messageEl.textContent = 'Success! Redirecting...';
             messageEl.className = 'message-area text-green-600';
 
-            // Redirect to the correct dashboard after a short delay
+            // --- CORRECTED REDIRECTION LOGIC ---
             setTimeout(() => {
-                let dashboardUrl = `${expectedRole}-dashboard.html`;
-                if (expectedRole === 'departhead') {
-                    dashboardUrl = 'department-dashboard.html';
+                if (user_role === 'department_head') {
+                    // Special case for department head to match the correct filename.
+                    window.location.href = `department-dashboard.html`;
+                } else {
+                    // Handles 'super_admin', 'staff', etc.
+                    window.location.href = `${user_role}-dashboard.html`;
                 }
-                window.location.href = dashboardUrl;
             }, 1000);
 
         } catch (error) {
             messageEl.textContent = error.message;
             messageEl.className = 'message-area text-red-600';
-            console.error('Login Error:', error);
-        } finally {
-            // Re-enable the button only if the login failed.
-            // If successful, the page will redirect away.
-            if (messageEl.classList.contains('text-red-600')) {
-                submitButton.disabled = false;
-            }
+            submitButton.disabled = false;
         }
     };
     
-    // Attach the same handler to all forms
-    adminLoginForm.addEventListener('submit', (e) => handleLogin(e, 'admin'));
+    // Attach the handler to all forms with the CORRECT role names
+    adminLoginForm.addEventListener('submit', (e) => handleLogin(e, 'super_admin'));
     staffLoginForm.addEventListener('submit', (e) => handleLogin(e, 'staff'));
-    deptLoginForm.addEventListener('submit', (e) => handleLogin(e, 'departhead'));
+    deptLoginForm.addEventListener('submit', (e) => handleLogin(e, 'department_head'));
 });

@@ -3,32 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Login - Municipal Issue Portal</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>Municipal Issue Management Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-gray-50 flex flex-col min-h-screen">
 
-    <div class="form-panel" style="max-width: 420px; margin: 5rem auto; animation: slideUpFadeIn 0.6s ease-out forwards;">
-        <form id="login-form">
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">Staff Portal Login</h2>
-            
-            <div style="margin-bottom: 1rem;">
-                <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
-                <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required>
+    <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-10">
+            <header>
+                 <svg class="mx-auto h-12 w-auto" style="color: var(--primary);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+                <h1 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                    Municipal Issue Management Portal
+                </h1>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    Sign in to access your designated dashboard
+                </p>
+            </header>
+
+            <div class="relative">
+                <!-- Login Selection -->
+                <div id="login-selection" class="form-container bg-white p-8 rounded-xl shadow-md border border-gray-200">
+                    <h2 class="text-xl font-semibold text-center text-gray-800 mb-6">Choose your login type</h2>
+                    <div class="space-y-4">
+                        <button id="show-admin-login" type="button" class="btn w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
+                            Super Admin Login
+                        </button>
+                        <button id="show-dept-login" type="button" class="btn secondary w-full">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" /></svg>
+                            Department Head Login
+                        </button>
+                        <button id="show-staff-login" type="button" class="btn accent w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
+                            Staff Login
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Containers (initially hidden) -->
+                <div id="admin-login-container" class="form-container hidden absolute top-0 left-0 w-full opacity-0">
+                    <section class="bg-white p-8 rounded-xl shadow-md border">
+                        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Super Admin Login</h2>
+                        <form id="admin-login-form" class="space-y-6" novalidate>
+                            <div id="super_admin-message" class="message-area"></div>
+                            <input name="email" type="email" required class="input-field" placeholder="Enter your email">
+                            <input name="password" type="password" required class="input-field" placeholder="Enter your password">
+                            <button type="submit" class="btn w-full">Sign In</button>
+                            <button type="button" class="back-button btn-link">← Back to selection</button>
+                        </form>
+                    </section>
+                </div>
+                <div id="dept-login-container" class="form-container hidden absolute top-0 left-0 w-full opacity-0">
+                     <section class="bg-white p-8 rounded-xl shadow-md border">
+                        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Department Head Login</h2>
+                        <form id="dept-login-form" class="space-y-6" novalidate>
+                            <div id="department_head-message" class="message-area"></div>
+                            <input name="email" type="email" required class="input-field" placeholder="Enter your email">
+                            <input name="password" type="password" required class="input-field" placeholder="Enter your password">
+                            <button type="submit" class="btn secondary w-full">Sign In</button>
+                            <button type="button" class="back-button btn-link">← Back to selection</button>
+                        </form>
+                    </section>
+                </div>
+                <div id="staff-login-container" class="form-container hidden absolute top-0 left-0 w-full opacity-0">
+                    <section class="bg-white p-8 rounded-xl shadow-md border">
+                        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Staff Login</h2>
+                        <form id="staff-login-form" class="space-y-6" novalidate>
+                            <div id="staff-message" class="message-area"></div>
+                            <input name="email" type="email" required class="input-field" placeholder="Enter your email">
+                            <input name="password" type="password" required class="input-field" placeholder="Enter your password">
+                            <button type="submit" class="btn accent w-full">Sign In</button>
+                            <button type="button" class="back-button btn-link">← Back to selection</button>
+                        </form>
+                    </section>
+                </div>
             </div>
-            
-            <div style="margin-bottom: 1.5rem;">
-                <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Password</label>
-                <input type="password" id="password" name="password" class="input-field" placeholder="Enter your password" required>
+
+            <div class="text-center">
+                <a href="#" class="font-medium text-blue-600 hover:text-blue-500 hover:underline">Forgot your password?</a>
             </div>
-            
-            <button type="submit" class="btn" style="width: 100%; justify-content: center;">Login</button>
-            
-            <p id="error-message" style="color: var(--danger); text-align: center; margin-top: 1rem; min-height: 20px;"></p>
-        </form>
-    </div>
+        </div>
+    </main>
 
-    <script src="login.js"></script>
+    <footer class="text-center py-4 text-gray-500 text-sm">
+        &copy; 2025 Municipal Corporation of Ranchi. All rights reserved. | <a href="#" class="hover:underline text-blue-600">Contact Support</a>
+    </footer>
 
+    <script src="api.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
