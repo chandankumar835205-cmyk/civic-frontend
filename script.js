@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = `staff-dashboard.html`;
                 }
                 else{
+                    //'super_admin'
                      window.location.href = `${user_role}-dashboard.html`;
 
                 }

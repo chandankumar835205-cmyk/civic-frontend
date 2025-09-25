@@ -3,7 +3,7 @@
 // Use the base URL of your deployed WEB PORTAL backend.
 // For local testing, this will be 'http://127.0.0.1:8000'.
 // Replace with your actual Render URL when deployed.
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'https://saarthi-xjh6.onrender.com';
 
 /**
  * A helper function to make authenticated requests to the API.
