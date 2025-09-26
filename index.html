@@ -3,151 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Municipal Issue Management Portal</title>
-    
+    <title>Issues Dashboard - Municipal Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css">
-    
     <style>
-        .message-area {
-            min-height: 24px; /* Reserve space to prevent layout shift */
-            text-align: center;
-            font-weight: 500;
-            margin-bottom: 1rem;
-            transition: opacity 0.3s ease-in-out;
+        /* Your custom styles from style.css are included here for a single-file solution */
+        :root {
+            --bg: #f9fafb;
+            --card: #ffffff;
+            --muted: #6b7280;
+            --primary: #0ea5e9;
+            --primary-dark: #0369a1;
+            --accent: #10b981;
+            --warning: #f59e0b; /* Amber 500 */
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --radius: 0.75rem; /* 12px */
         }
-        /* Simple transition for form containers */
-        .form-container {
-            transition: opacity 0.3s ease-in-out;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
         }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body class="bg-gray-50">
 
-    <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        
-        <div class="max-w-md w-full space-y-10">
-            <header>
-                 <svg class="mx-auto h-12 w-auto text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <svg class="h-8 w-8 text-sky-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM10.5 16.5h.008v.008h-.008v-.008z" />
                 </svg>
-                <h1 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                    Municipal Issue Management Portal
-                </h1>
-                <p class="mt-2 text-center text-sm text-gray-600">
-                    Sign in to access your designated dashboard
-                </p>
-            </header>
+                <h1 class="ml-3 text-2xl font-bold text-gray-800">Municipal Issues Dashboard</h1>
+            </div>
+            <div class="flex items-center">
+                <p class="text-sm text-gray-600 mr-4">Welcome, <span class="font-semibold">Guest User</span></p>
+                <button class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700">
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </header>
 
-            <div class="relative">
-                <!-- Login Role Selection -->
-                <div id="login-selection" class="form-container bg-white p-8 rounded-xl shadow-md border border-gray-200">
-                    <h2 class="text-xl font-semibold text-center text-gray-800 mb-6">Choose your login type</h2>
-                    <div class="space-y-4">
-                        <button id="show-admin-login" type="button" class="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                            Super Admin Login
-                        </button>
-                        
-                        <button id="show-dept-login" type="button" class="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-700">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" /></svg>
-                            Department Head Login
-                        </button>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Dashboard Title -->
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Current Issues</h2>
 
-                        <button id="show-staff-login" type="button" class="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
-                            Staff Login
-                        </button>
+        <!-- Grid of Issue Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Issue Card 1 -->
+            <div class="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+                <div>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-white bg-blue-500 py-1 px-3 rounded-full">Water Supply</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Major pipeline leak reported near Main Road</h3>
+                    <p class="text-sm text-gray-600 mb-4">Water logging the entire street, causing traffic issues. Needs urgent attention.</p>
+                </div>
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="font-semibold">Location:</span>
+                        <a href="https://www.google.com/maps?q=23.3441,85.3096" target="_blank" class="text-blue-600 hover:underline">23.3441, 85.3096</a>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
+                        <span class="font-semibold">Submitted:</span>
+                        <span>25 Sep 2025, 08:15 AM</span>
                     </div>
                 </div>
-
-                <!-- Super Admin Login Form -->
-                <div id="admin-login-container" class="form-container hidden absolute top-0 left-0 w-full opacity-0">
-                    <section class="bg-white p-8 rounded-xl shadow-md border border-gray-200">
-                        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Super Admin Login</h2>
-                        <form id="adminLoginForm" class="space-y-6" novalidate>
-                            <div id="super_admin-message" class="message-area"></div>
-                            <div>
-                                <label for="admin-email" class="block text-sm font-medium text-gray-700">Email</label>
-                                <input id="admin-email" name="email" type="email" autocomplete="email" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <label for="admin-password" class="block text-sm font-medium text-gray-700">Password</label>
-                                <input id="admin-password" name="password" type="password" autocomplete="current-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50">Sign In</button>
-                            </div>
-                             <button type="button" class="back-button w-full text-sm text-center text-gray-600 hover:text-gray-900 hover:underline mt-4">← Back to selection</button>
-                        </form>
-                    </section>
-                </div>
-
-                <!-- Department Head Login Form -->
-                <div id="dept-login-container" class="form-container hidden absolute top-0 left-0 w-full opacity-0">
-                     <section class="bg-white p-8 rounded-xl shadow-md border border-gray-200">
-                        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Department Head Login</h2>
-                        <form id="deptLoginForm" class="space-y-6" novalidate>
-                            <div id="department_head-message" class="message-area"></div>
-                            <div>
-                                <label for="dept-email" class="block text-sm font-medium text-gray-700">Email</label>
-                                <input id="dept-email" name="username" type="email" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <label for="dept-password" class="block text-sm font-medium text-gray-700">Password</label>
-                                <input id="dept-password" name="password" type="password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 disabled:opacity-50">Sign In</button>
-                            </div>
-                             <button type="button" class="back-button w-full text-sm text-center text-gray-600 hover:text-gray-900 hover:underline mt-4">← Back to selection</button>
-                        </form>
-                    </section>
-                </div>
-
-                <!-- Staff Login Form -->
-                <div id="staff-login-container" class="form-container hidden absolute top-0 left-0 w-full opacity-0">
-                    <section class="bg-white p-8 rounded-xl shadow-md border border-gray-200">
-                        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Staff Login</h2>
-                        <form id="staffLoginForm" class="space-y-6" novalidate>
-                            <div id="staff-message" class="message-area"></div>
-                            <div>
-                                <label for="staff-email" class="block text-sm font-medium text-gray-700">Email</label>
-                                <input id="staff-email" name="email" type="email" autocomplete="email" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <label for="staff-password" class="block text-sm font-medium text-gray-700">Password</label>
-                                <input id="staff-password" name="password" type="password" autocomplete="current-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 disabled:opacity-50">Sign In</button>
-                            </div>
-                             <button type="button" class="back-button w-full text-sm text-center text-gray-600 hover:text-gray-900 hover:underline mt-4">← Back to selection</button>
-                        </form>
-                    </section>
-                </div>
-
             </div>
 
-            <div class="text-center">
-                <a href="#" class="font-medium text-blue-600 hover:text-blue-500 hover:underline">
-                    Forgot your password?
-                </a>
+            <!-- Issue Card 2 -->
+            <div class="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+                <div>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-white bg-green-500 py-1 px-3 rounded-full">Sanitation</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Garbage overflow at City Market bins</h3>
+                    <p class="text-sm text-gray-600 mb-4">The public bins have not been cleared for 3 days. All waste has been collected and the area sanitized.</p>
+                </div>
+                <div class="border-t border-gray-200 pt-4">
+                     <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="font-semibold">Location:</span>
+                        <a href="https://www.google.com/maps?q=23.3520,85.3240" target="_blank" class="text-blue-600 hover:underline">23.3520, 85.3240</a>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
+                        <span class="font-semibold">Submitted:</span>
+                        <span>24 Sep 2025, 02:30 PM</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Issue Card 3 -->
+            <div class="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+                <div>
+                    <div class="flex justify-between items-start mb-3">
+                         <span class="text-xs font-semibold uppercase tracking-wider text-white bg-gray-500 py-1 px-3 rounded-full">Roads & Transport</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Streetlight not working on Harmu Bypass</h3>
+                    <p class="text-sm text-gray-600 mb-4">The streetlight at the main crossing has been out for a week, creating a safety hazard at night.</p>
+                </div>
+                <div class="border-t border-gray-200 pt-4">
+                     <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="font-semibold">Location:</span>
+                        <a href="https://www.google.com/maps?q=23.3602,85.3031" target="_blank" class="text-blue-600 hover:underline">23.3602, 85.3031</a>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
+                        <span class="font-semibold">Submitted:</span>
+                        <span>22 Sep 2025, 09:00 PM</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <footer class="text-center py-4 text-gray-500 text-sm">
-        &copy; 2025 Municipal Corporation of Ranchi. All rights reserved. | <a href="#" class="hover:underline text-blue-600">Contact Support</a>
-    </footer>
-
-    <script src="api.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
 
